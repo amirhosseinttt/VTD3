@@ -1,1 +1,2 @@
 detector/dataset/*
+detector/__pycache__/*
