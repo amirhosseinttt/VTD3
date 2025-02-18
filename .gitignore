@@ -1,2 +1,3 @@
 tracker/test/*
 tracker/test.ipynb
+tracker/__pycache__/*
