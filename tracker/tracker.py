@@ -12,10 +12,13 @@ class Tracker:
 
     def track(self, dets, scores, cls, img=None):
         tracks = self.bot_sort.init_track(dets, scores, cls, img)
+        for track in tracks:
+            track.activate(kalman_filter=self.bot_sort.kalman_filter, frame_id=self.frame_count)
         self.bot_sort.multi_predict(tracks)
         
         self.frame_count += 1
-        
+        return tracks
+
 
 if __name__ == '__main__':
     tracker = Tracker()
