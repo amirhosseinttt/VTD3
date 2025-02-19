@@ -1,5 +1,7 @@
-tracker/__pycache__/*
 tracker/test/*
+tracker/test.ipynb
+tracker/__pycache__/*
+tracker/__pycache__/*
 tracker/test.ipynb
 detector/dataset/*
 detector/__pycache__/*
