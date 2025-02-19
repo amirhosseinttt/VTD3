@@ -22,6 +22,7 @@ class Tracker:
         yolo_output = yolo_output.cpu().numpy()
         tracks = self.bot_sort.update(yolo_output.boxes)
         
+                
         if len(tracks) > 0:
             yolo_output.update(tracks[:, :-1])
         
@@ -39,24 +40,24 @@ if __name__ == '__main__':
         # Read a frame from the video
         success, frame = cap.read()
         
-        # resize
-
         if success:
+            # resize
             frame = cv2.resize(frame, (640, 360))
-            
-            # Run YOLO11 tracking on the frame, persisting tracks between frames
-            # results = yolo1.track(frame, persist=True)
 
             detection = yolo.predict(frame)[0]
             
-            # detection = tracker.update_yolo_output(detection)
-                    
+            # remove all boxes except cars
+            car_mask = detection.boxes.cls == 2
+            detection.boxes = detection.boxes[car_mask]
             
+            detection = tracker.update_yolo_output(detection)
+            
+
             # Visualize the results on the frame
             annotated_frame = detection.plot()
 
             # Display the annotated frame
-            cv2.imshow("YOLO11 Tracking", annotated_frame)
+            cv2.imshow("YOLO Tracking", annotated_frame)
 
             # Break the loop if 'q' is pressed
             if cv2.waitKey(1) & 0xFF == ord("q"):
