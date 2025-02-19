@@ -1,0 +1,6 @@
+tracker/__pycache__/*
+tracker/test/*
+tracker/test.ipynb
+detector/dataset/*
+detector/__pycache__/*
+detector/models/*
