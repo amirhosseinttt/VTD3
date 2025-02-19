@@ -14,7 +14,7 @@ class Detector:
     
 
 if __name__ == "__main__":
-    detector = Detector("models/Autonomoid/yolov8-car-front-rear-left-right-top/best.pt")
+    detector = Detector("models/yolov8n.pt")
     output = detector.detect("dataset/test.jpg")[0]
     # plot yolo outpt with bbox
     for box in output.boxes:
