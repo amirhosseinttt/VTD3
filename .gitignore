@@ -7,3 +7,4 @@ detector/__pycache__/*
 detector/models/*
 
 rl/__pycache__/*
+rl/model/*
