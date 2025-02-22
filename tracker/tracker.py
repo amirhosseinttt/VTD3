@@ -28,6 +28,7 @@ class Tracker:
         
         self.frame_count += 1
         return yolo_output
+    
 
 
 if __name__ == '__main__':
@@ -52,6 +53,12 @@ if __name__ == '__main__':
             
             detection = tracker.update_yolo_output(detection)
             
+            id_mask = detection.boxes.id == 1
+            objective_track = detection.boxes[id_mask]
+            
+            if len(objective_track) == 0:
+                print("Object Lost!")
+                # break
 
             # Visualize the results on the frame
             annotated_frame = detection.plot()
