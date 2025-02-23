@@ -4,34 +4,14 @@ from TD3 import TD3_agent
 import gymnasium as gym
 import numpy as np
 import os, shutil
-import argparse
 import torch
+import yaml
+from types import SimpleNamespace
 
 
 '''Hyperparameter Setting'''
-parser = argparse.ArgumentParser()
-parser.add_argument('--dvc', type=str, default='cuda', help='running device: cuda or cpu')
-parser.add_argument('--EnvIdex', type=int, default=0, help='PV1, Lch_Cv2, Humanv4, HCv4, BWv3, BWHv3')
-parser.add_argument('--write', type=str2bool, default=False, help='Use SummaryWriter to record the training')
-parser.add_argument('--render', type=str2bool, default=False, help='Render or Not')
-parser.add_argument('--Loadmodel', type=str2bool, default=False, help='Load pretrained model or Not')
-parser.add_argument('--ModelIdex', type=int, default=30, help='which model to load')
-
-parser.add_argument('--seed', type=int, default=0, help='random seed')
-parser.add_argument('--update_every', type=int, default=50, help='training frequency')
-parser.add_argument('--Max_train_steps', type=int, default=int(5e6), help='Max training steps')
-parser.add_argument('--save_interval', type=int, default=int(1e5), help='Model saving interval, in steps.')
-parser.add_argument('--eval_interval', type=int, default=int(2e3), help='Model evaluating interval, in steps.')
-
-parser.add_argument('--delay_freq', type=int, default=1, help='Delayed frequency for Actor and Target Net')
-parser.add_argument('--gamma', type=float, default=0.99, help='Discounted Factor')
-parser.add_argument('--net_width', type=int, default=256, help='Hidden net width, s_dim-400-300-a_dim')
-parser.add_argument('--a_lr', type=float, default=1e-4, help='Learning rate of actor')
-parser.add_argument('--c_lr', type=float, default=1e-4, help='Learning rate of critic')
-parser.add_argument('--batch_size', type=int, default=256, help='batch_size of training')
-parser.add_argument('--explore_noise', type=float, default=0.15, help='exploring noise when interacting')
-parser.add_argument('--explore_noise_decay', type=float, default=0.998, help='Decay rate of explore noise')
-opt = parser.parse_args()
+opt = yaml.safe_load(open('config.yaml'))
+opt = SimpleNamespace(**opt)
 opt.dvc = torch.device(opt.dvc) # from str to torch.device
 print(opt)
 

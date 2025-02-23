@@ -1,0 +1,19 @@
+dvc: cpu                      # running device: cuda or cpu
+EnvIdex: 0                    # PV1, Lch_Cv2, Humanv4, HCv4, BWv3, BWHv3
+write: False                  # Use SummaryWriter to record the training
+render: False                 # Render the environment
+Loadmodel: False              # Load the model
+ModelIdex: 30                 # Which model to load
+seed: 0                       # Random seed
+update_every: 50              # Training frequency
+Max_train_steps: 5000000      # Max training steps
+save_interval: 100000         # Model saving interval
+eval_interval: 2000           # Model evaluating interval
+delay_freq: 1                 # Delayed frequency for Actor and Target Net
+gamma: 0.99                   # Discounted factor
+net_width: 256                # Hidden net width
+a_lr: 0.0001                  # Learning rate of actor
+c_lr: 0.0001                  # Learning rate of critic
+batch_size: 256               # Training batch size
+explore_noise: 0.15           # Initial exploring noise
+explore_noise_decay: 0.998    # Exploring noise decay
