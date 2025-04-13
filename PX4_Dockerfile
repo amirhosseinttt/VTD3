@@ -1,0 +1,45 @@
+# Use the official Ubuntu 24.04 as the base image
+FROM ubuntu:24.04
+
+# Set environment variables to avoid interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    sudo \
+    cmake \
+    ninja-build \
+    build-essential \
+    gcc \
+    g++ \
+    make \
+    wget \
+    curl \
+    unzip \
+    software-properties-common \
+    && rm -rf /var/lib/apt/lists/*
+
+
+
+COPY xray.zip xray.zip
+RUN unzip xray.zip && cd xray && ./xray & sleep 3 && \
+    git config --global http.proxy http://127.0.0.1:10809 && \
+    git clone https://github.com/PX4/PX4-Autopilot.git --recursive /px4-firmware && \
+    cd px4-firmware && \
+    bash ./Tools/setup/ubuntu.sh 
+
+
+
+
+WORKDIR /px4-firmware
+
+
+
+# Expose ports for MAVLink communication and video streaming
+EXPOSE 14550/udp 14540/udp 5600/udp
+
+
+
+# Default command to start PX4 SITL with Gazebo
+CMD ["make", "px4_sitl", "gz_x500_mono_cam"]
