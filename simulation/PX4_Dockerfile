@@ -26,7 +26,7 @@ RUN unzip xray.zip && \
     rm xray.zip && \
     cd xray && \
     chmod +x xray && \
-    ./xray && sleep 5 && \
+    ./xray & sleep 5 && \
     git clone https://github.com/PX4/PX4-Autopilot.git --recursive /px4-firmware && \
     cd px4-firmware && \
     bash ./Tools/setup/ubuntu.sh 
