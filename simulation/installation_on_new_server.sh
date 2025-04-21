@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Check if running as root
+if [ "$(id -u)" -ne 0 ]; then
+    echo "This script must be run as root. Try with sudo."
+    exit 1
+fi
+
 # run docker_installation script
 docker_installation() {
     # Check if Docker is installed
@@ -57,11 +63,7 @@ docker-compose --version
 # Shecan DNS configuration script
 # Sets primary DNS to 178.22.122.100 and secondary to 185.51.200.2
 
-# Check if running as root
-if [ "$(id -u)" -ne 0 ]; then
-    echo "This script must be run as root. Try with sudo."
-    exit 1
-fi
+
 
 # Backup current resolv.conf
 echo "Backing up current DNS configuration to /etc/resolv.conf.backup"
