@@ -20,16 +20,16 @@ RUN apt-get update && apt-get install -y \
     software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
+COPY xray.zip xray.zip
 
-
-RUN echo "Setting DNS servers to Shecan DNS..." \
-    echo "nameserver 178.22.122.100" > /etc/resolv.conf \
-    echo "nameserver 185.51.200.2" >> /etc/resolv.conf \
+RUN unzip xray.zip && \
+    rm xray.zip && \
+    cd xray && \
+    chmod +x xray && \
+    ./xray && sleep 5 && \
     git clone https://github.com/PX4/PX4-Autopilot.git --recursive /px4-firmware && \
     cd px4-firmware && \
     bash ./Tools/setup/ubuntu.sh 
-
-
 
 
 WORKDIR /px4-firmware
