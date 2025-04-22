@@ -20,16 +20,8 @@ RUN apt-get update && apt-get install -y \
     software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
-COPY xray.zip xray.zip
-
-RUN unzip xray.zip && \
-    rm xray.zip && \
-    cd xray && \
-    chmod +x xray && \
-    ./xray > /dev/null 2>&1 &\
-    sleep 3 && \
-    git config --global http.proxy http://127.0.0.1:10809 && \
-    git clone https://github.com/PX4/PX4-Autopilot.git --recursive /px4-firmware && \
+    
+RUN git clone https://github.com/PX4/PX4-Autopilot.git --recursive /px4-firmware && \
     cd px4-firmware && \
     bash ./Tools/setup/ubuntu.sh 
 
