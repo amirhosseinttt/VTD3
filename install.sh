@@ -38,6 +38,8 @@ fi
 # step-3: create px4-gazebo-sitl docker image
 echo "Building px4-gazebo-sitl Docker image..."
 DOCKERFILE_NAME=PX4_Dockerfile
+CURRENT_PATH=$(pwd)
+DOCKERFILE_NAME="$CURRENT_PATH/$DOCKERFILE_NAME"
 IMAGE_NAME=px4-gazebo-sitl:latest
 filename=build_image.sh
 if [ -f "$SCRIPTS_PATH$filename" ]; then
@@ -53,6 +55,8 @@ fi
 # step-4: create ROS2 docker image
 echo "Building ROS2 Docker image..."
 DOCKERFILE_NAME=ROS2_Dockerfile
+CURRENT_PATH=$(pwd)
+DOCKERFILE_NAME="$CURRENT_PATH/$DOCKERFILE_NAME"
 IMAGE_NAME=ros2:latest
 filename=build_image.sh
 if [ -f "$SCRIPTS_PATH$filename" ]; then
