@@ -41,7 +41,3 @@ WORKDIR /px4-firmware
 # Expose ports for MAVLink communication and video streaming
 EXPOSE 14550/udp 14540/udp 5600/udp
 
-
-
-# Default command to start PX4 SITL with Gazebo
-CMD ["make", "px4_sitl", "gz_x500_mono_cam"]

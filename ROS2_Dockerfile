@@ -34,4 +34,3 @@ RUN pip3 install --upgrade pip setuptools && \
 
 # Set up entry point and default command
 WORKDIR /ros2_ws
-CMD ["bash"]
