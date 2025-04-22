@@ -33,6 +33,19 @@ else
 fi
 
 
+# step-2.1: change docker DNS to shecan
+echo "Changing Docker DNS to Shecan..."
+filename=configure_docker_dns.sh
+if [ -f "$SCRIPTS_PATH$filename" ]; then
+    echo "Running $filename..."
+    bash "$SCRIPTS_PATH$filename"
+else
+    echo "$filename not found in $SCRIPTS_PATH"
+fi
+# Restart Docker service to apply changes
+echo "Restarting Docker service..."
+systemctl restart docker
+
 
 
 # step-3: create px4-gazebo-sitl docker image
@@ -42,7 +55,7 @@ IMAGE_NAME=px4-gazebo-sitl:latest
 filename=build_image.sh
 if [ -f "$SCRIPTS_PATH$filename" ]; then
     echo "Running $filename..."
-    bash "$SCRIPTS_PATH$filename $DOCKERFILE_NAME $IMAGE_NAME"
+    bash "$SCRIPTS_PATH$filename" "$(pwd)/$DOCKERFILE_NAME" "$IMAGE_NAME"
 else
     echo "$filename not found in $SCRIPTS_PATH"
 fi
@@ -57,7 +70,7 @@ IMAGE_NAME=ros2:latest
 filename=build_image.sh
 if [ -f "$SCRIPTS_PATH$filename" ]; then
     echo "Running $filename..."
-    bash "$SCRIPTS_PATH$filename $DOCKERFILE_NAME $IMAGE_NAME"
+    bash "$SCRIPTS_PATH$filename" "$(pwd)/$DOCKERFILE_NAME" "$IMAGE_NAME"
 else
     echo "$filename not found in $SCRIPTS_PATH"
 fi

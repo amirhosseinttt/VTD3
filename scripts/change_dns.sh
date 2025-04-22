@@ -23,6 +23,10 @@ nameserver 178.22.122.100
 nameserver 185.51.200.2
 EOF
 
+# Make resolv.conf immutable to prevent changes
+echo "Making resolv.conf immutable to prevent automatic updates..."
+chattr +i /etc/resolv.conf
+
 # For systems using systemd-resolved
 if systemctl is-active systemd-resolved >/dev/null 2>&1; then
   echo "Configuring systemd-resolved to use Shecan DNS..."
@@ -42,16 +46,26 @@ fi
 if systemctl is-active NetworkManager >/dev/null 2>&1; then
   echo "Configuring NetworkManager to use Shecan DNS..."
   
-  # Get the current active connection
-  ACTIVE_CONN=$(nmcli -t -f NAME,TYPE connection show --active | grep ethernet | cut -d':' -f1)
+  # Get all connections
+  CONNECTIONS=$(nmcli -t -f NAME connection show)
   
-  if [ -n "$ACTIVE_CONN" ]; then
-    echo "Setting DNS for connection: $ACTIVE_CONN"
-    nmcli connection modify "$ACTIVE_CONN" ipv4.dns "178.22.122.100 185.51.200.2"
-    nmcli connection down "$ACTIVE_CONN" && nmcli connection up "$ACTIVE_CONN"
-  else
-    echo "No active ethernet connection found"
-  fi
+  # Set DNS for all connections
+  for CONN in $CONNECTIONS; do
+    echo "Setting DNS for connection: $CONN"
+    nmcli connection modify "$CONN" ipv4.dns "178.22.122.100 185.51.200.2"
+    nmcli connection modify "$CONN" ipv4.ignore-auto-dns true
+  done
+  
+  # Restart NetworkManager
+  systemctl restart NetworkManager
+  
+  # Reconnect active connections
+  ACTIVE_CONNS=$(nmcli -t -f NAME,TYPE connection show --active)
+  for CONN in $ACTIVE_CONNS; do
+    CONN_NAME=$(echo "$CONN" | cut -d':' -f1)
+    echo "Reconnecting: $CONN_NAME"
+    nmcli connection down "$CONN_NAME" && nmcli connection up "$CONN_NAME"
+  done
 fi
 
 echo "DNS changed to Shecan successfully!"
@@ -63,3 +77,8 @@ echo "Testing DNS resolution..."
 host google.com
 
 echo "Done!"
+
+echo "--------------------------------"
+echo "IMPORTANT: To temporarily remove immutability (if needed), run:"
+echo "sudo chattr -i /etc/resolv.conf"
+echo "--------------------------------"
