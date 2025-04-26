@@ -3,12 +3,9 @@ services:
     image: px4-gazebo-sitl:latest
     container_name: px4-sitl
     network_mode: host
-    command: >
-      bash -c "
-      touch /tmp/px4-ready &&
-      "
+
     healthcheck:
-      test: ["CMD-SHELL", "[ -f /tmp/px4-ready ] && ss -uln | grep -q 14540"]
+      test: ["CMD-SHELL", "ss -uln | grep -q 14540"]
       interval: 1s
       timeout: 2m
       retries: 30
