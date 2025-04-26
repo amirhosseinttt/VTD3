@@ -2,16 +2,15 @@ services:
   px4-sitl:
     image: px4-gazebo-sitl:latest
     container_name: px4-sitl
-    network_mode: host  # Required for MAVLink/ROS 2 communication
+    network_mode: host
     command: >
       bash -c "
-      make px4_sitl gz_x500_mono_cam &&
-      sleep infinity
+      touch /tmp/px4-ready &&
       "
     healthcheck:
-      test: ["CMD", "netstat", "-anp", "|", "grep", "14540"]
+      test: ["CMD-SHELL", "[ -f /tmp/px4-ready ] && ss -uln | grep -q 14540"]
       interval: 1s
-      timeout: 30s
+      timeout: 2m
       retries: 30
 
   ros2:
