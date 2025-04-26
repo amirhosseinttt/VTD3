@@ -42,9 +42,6 @@ if [ -f "$SCRIPTS_PATH$filename" ]; then
 else
     echo "$filename not found in $SCRIPTS_PATH"
 fi
-# Restart Docker service to apply changes
-echo "Restarting Docker service..."
-systemctl restart docker
 
 
 

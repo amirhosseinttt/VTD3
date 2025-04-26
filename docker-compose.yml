@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   px4-sitl:
     image: px4-gazebo-sitl:latest
@@ -7,7 +5,6 @@ services:
     network_mode: host  # Required for MAVLink/ROS 2 communication
     command: >
       bash -c "
-      cd /PX4-Autopilot &&
       make px4_sitl gz_x500_mono_cam &&
       sleep infinity
       "
