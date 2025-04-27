@@ -3,6 +3,10 @@ services:
     image: px4-gazebo-sitl:latest
     container_name: px4-sitl
     network_mode: host
+    command: >
+      bash -c "
+      sleep infinity
+      "
 
     healthcheck:
       test: ["CMD-SHELL", "ss -uln | grep -q 14540"]
@@ -15,11 +19,10 @@ services:
     image: ros2:latest
     container_name: ros2-node
     network_mode: host  # Must match px4-sitl's network
-    depends_on:
-      px4-sitl:
-        condition: service_healthy
+    # depends_on:
+    #   px4-sitl:
+    #     condition: service_healthy
     command: >
       bash -c "
-      sleep 5 &&  # Wait for PX4 to initialize
-      ros2 run mavros mavros_node __ns:=/uav1 _fcu_url:='udp://:14540@127.0.0.1:14540'
+      sleep infinity
       "
