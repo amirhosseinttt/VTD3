@@ -6,14 +6,16 @@ services:
     command: >
       bash -c "
       make px4_sitl gz_x500_mono_cam &
-      sleep 500
+      apt update && apt install -y net-tools &&
+      sleep infinity
       "
+#   while ! netstat -tulpn | grep -q ":14580"; do sleep 1; done; exit 0
 
     healthcheck:
-      test: ["CMD-SHELL", "ss -uln | grep -q 14540"]
+      test: ["CMD-SHELL", "netstat -tulpn | grep -q 14580"]
       interval: 1m
-      timeout: 10s
-      start_period: 5m
+      timeout: 10m
+      start_period: 10s
       retries: 30
 
   ros2:

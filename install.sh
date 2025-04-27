@@ -75,7 +75,7 @@ fi
 
 # step-5: start the docker compose service
 echo "Starting Docker Compose service..."
-docker-compose up 
+docker-compose up --wait
 
 
 
