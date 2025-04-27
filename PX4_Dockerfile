@@ -35,5 +35,5 @@ EXPOSE 14550/udp 14540/udp 5600/udp
 
 
 # Set the default command to run when the container starts
-ENV HEADLESS=1
-CMD ["make", "px4_sitl", "gz_x500_mono_cam", "&"]
+# ENV HEADLESS=1
+# CMD ["make", "px4_sitl", "gz_x500_mono_cam", "&"]
