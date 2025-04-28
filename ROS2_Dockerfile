@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Initialize rosdep and update (uncomment if needed)
-RUN rosdep init && rosdep update
+# RUN rosdep init && rosdep update
 
 # Create a workspace directory
 RUN mkdir -p /ros2_ws/src
@@ -29,6 +29,7 @@ RUN pip3 install --upgrade pip setuptools && \
 # Install uXRCE-DDS agent
 RUN git clone -b v2.4.2 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git && \
     cd Micro-XRCE-DDS-Agent && \
+    sed -i '99s/.*/set(_fastdds_tag 2.12.1)/' CMakeLists.txt && \
     mkdir build && \
     cd build && \
     cmake .. && \
