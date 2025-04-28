@@ -6,7 +6,6 @@ services:
     command: >
       bash -c "
       make px4_sitl gz_x500_mono_cam &
-      apt update && apt install -y net-tools &&
       sleep infinity
       "
 #   while ! netstat -tulpn | grep -q ":14580"; do sleep 1; done; exit 0

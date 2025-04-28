@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     nano \
     cmake \
+    net-tools \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 

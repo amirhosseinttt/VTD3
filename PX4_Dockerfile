@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     software-properties-common \
+    net-tools \
     && rm -rf /var/lib/apt/lists/*
 
     
