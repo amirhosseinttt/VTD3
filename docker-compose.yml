@@ -27,5 +27,6 @@ services:
         condition: service_healthy
     command: >
       bash -c "
+      MicroXRCEAgent udp4 -p 8888 &&
       sleep infinity
       "

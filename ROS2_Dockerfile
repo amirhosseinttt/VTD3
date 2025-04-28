@@ -12,10 +12,12 @@ RUN apt-get update && apt-get install -y \
     git \
     wget \
     nano \
+    cmake \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# # Initialize rosdep and update
-# RUN rosdep init && rosdep update
+# Initialize rosdep and update (uncomment if needed)
+RUN rosdep init && rosdep update
 
 # Create a workspace directory
 RUN mkdir -p /ros2_ws/src
@@ -24,13 +26,33 @@ RUN mkdir -p /ros2_ws/src
 RUN pip3 install --upgrade pip setuptools && \
     pip3 install pytest pytest-cov flake8
 
-# Copy your ROS 2 packages (adjust path as needed)
-# COPY ./my_ros2_packages /ros2_ws/src/
+# Install uXRCE-DDS agent
+RUN git clone -b v2.4.2 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git && \
+    cd Micro-XRCE-DDS-Agent && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make && \
+    make install
 
-# Build the workspace (example - uncomment when you add packages)
-# WORKDIR /ros2_ws
-# RUN source /opt/ros/humble/setup.bash && \
-#     colcon build --symlink-install
+# Update library cache
+RUN ldconfig /usr/local/lib/
 
-# Set up entry point and default command
+# Set up working directory
 WORKDIR /ros2_ws
+
+# Source ROS 2 setup script
+RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+
+# Create an entrypoint script
+RUN echo '#!/bin/bash\nsource /opt/ros/humble/setup.bash\nexec "$@"' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Default command - you can choose an appropriate default command
+CMD ["bash"]
+
+# To run the MicroXRCE agent, use:
+# CMD ["MicroXRCEAgent", "udp4", "-p", "8888"]
