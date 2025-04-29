@@ -24,8 +24,7 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /ros2_ws/src
 
 # Set up Python environment
-RUN pip3 install --upgrade pip setuptools && \
-    pip3 install pytest pytest-cov flake8
+RUN pip3 install --upgrade pip setuptools pytest pytest-cov flake8 wheel twine check-wheel-contents
 
 # Install uXRCE-DDS agent
 RUN git clone -b v2.4.2 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git && \
@@ -39,6 +38,16 @@ RUN git clone -b v2.4.2 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git && 
 
 # Update library cache
 RUN ldconfig /usr/local/lib/
+
+
+# Build ROS2 workspace
+RUN mkdir -p ~/ws_sensor_combined/src/ && \
+    cd ~/ws_sensor_combined/src/ && \
+    git clone https://github.com/PX4/px4_msgs.git && \
+    git clone https://github.com/PX4/px4_ros_com.git && \
+    cd .. && \
+    source /opt/ros/humble/setup.bash && \
+    colcon build
 
 # Set up working directory
 WORKDIR /ros2_ws
