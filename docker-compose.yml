@@ -26,6 +26,8 @@ services:
         condition: service_healthy
     command: >
       bash -c "
+      cd ~/ws_sensor_combined &&
+      colcon build && 
       MicroXRCEAgent udp4 -p 8888 &&
       sleep infinity
       "
