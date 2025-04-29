@@ -44,7 +44,7 @@ RUN ldconfig /usr/local/lib/
 RUN mkdir -p ~/ws_sensor_combined/src/ && \
     cd ~/ws_sensor_combined/src/ && \
     git clone https://github.com/PX4/px4_msgs.git && \
-    git clone https://github.com/PX4/px4_ros_com.git && \
+    git clone https://github.com/PX4/px4_ros_com.git
 
 # Set up working directory
 WORKDIR /ros2_ws
