@@ -8,3 +8,5 @@ detector/models/*
 
 rl/__pycache__/*
 rl/model/*
+
+simulation/xray.zip

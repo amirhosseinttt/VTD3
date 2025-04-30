@@ -1,0 +1,33 @@
+services:
+  px4-sitl:
+    image: px4-gazebo-sitl:latest
+    container_name: px4-sitl
+    network_mode: host
+    command: >
+      bash -c "
+      make px4_sitl gz_x500_mono_cam &
+      sleep infinity
+      "
+#   while ! netstat -tulpn | grep -q ":14580"; do sleep 1; done; exit 0
+
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -tulpn | grep -q 14580"]
+      interval: 1m
+      timeout: 10m
+      start_period: 10s
+      retries: 30
+
+  ros2:
+    image: ros2:latest
+    container_name: ros2-node
+    network_mode: host  # Must match px4-sitl's network
+    depends_on:
+      px4-sitl:
+        condition: service_healthy
+    command: >
+      bash -c "
+      cd ~/ws_sensor_combined &&
+      colcon build && 
+      MicroXRCEAgent udp4 -p 8888 &&
+      sleep infinity
+      "

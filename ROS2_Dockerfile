@@ -1,0 +1,66 @@
+# Use the official ROS 2 Humble desktop image
+FROM osrf/ros:humble-desktop
+
+# Avoid interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install essential tools and Python dependencies
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    python3-rosdep \
+    python3-colcon-common-extensions \
+    git \
+    wget \
+    nano \
+    cmake \
+    net-tools \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Initialize rosdep and update (uncomment if needed)
+# RUN rosdep init && rosdep update
+
+# Create a workspace directory
+RUN mkdir -p /ros2_ws/src
+
+# Set up Python environment
+RUN pip3 install --upgrade pip setuptools pytest pytest-cov flake8 wheel twine check-wheel-contents
+
+# Install uXRCE-DDS agent
+RUN git clone -b v2.4.2 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git && \
+    cd Micro-XRCE-DDS-Agent && \
+    sed -i '99s/.*/set(_fastdds_tag 2.12.1)/' CMakeLists.txt && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make && \
+    make install
+
+# Update library cache
+RUN ldconfig /usr/local/lib/
+
+
+# Build ROS2 workspace
+RUN mkdir -p ~/ws_sensor_combined/src/ && \
+    cd ~/ws_sensor_combined/src/ && \
+    git clone https://github.com/PX4/px4_msgs.git && \
+    git clone https://github.com/PX4/px4_ros_com.git
+
+# Set up working directory
+WORKDIR /ros2_ws
+
+# Source ROS 2 setup script
+RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+
+# Create an entrypoint script
+RUN echo '#!/bin/bash\nsource /opt/ros/humble/setup.bash\nexec "$@"' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Default command - you can choose an appropriate default command
+CMD ["bash"]
+
+# To run the MicroXRCE agent, use:
+# CMD ["MicroXRCEAgent", "udp4", "-p", "8888"]
