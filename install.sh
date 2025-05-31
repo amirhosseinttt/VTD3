@@ -22,26 +22,26 @@ fi
 
 
 
-# step-2: change system DNS to shecan
-echo "Changing system DNS to Shecan..."
-filename=change_dns.sh
-if [ -f "$SCRIPTS_PATH$filename" ]; then
-    echo "Running $filename..."
-    bash "$SCRIPTS_PATH$filename"
-else
-    echo "$filename not found in $SCRIPTS_PATH"
-fi
+# # step-2: change system DNS to shecan
+# echo "Changing system DNS to Shecan..."
+# filename=change_dns.sh
+# if [ -f "$SCRIPTS_PATH$filename" ]; then
+#     echo "Running $filename..."
+#     bash "$SCRIPTS_PATH$filename"
+# else
+#     echo "$filename not found in $SCRIPTS_PATH"
+# fi
 
 
-# step-2.1: change docker DNS to shecan
-echo "Changing Docker DNS to Shecan..."
-filename=configure_docker_dns.sh
-if [ -f "$SCRIPTS_PATH$filename" ]; then
-    echo "Running $filename..."
-    bash "$SCRIPTS_PATH$filename"
-else
-    echo "$filename not found in $SCRIPTS_PATH"
-fi
+# # step-2.1: change docker DNS to shecan
+# echo "Changing Docker DNS to Shecan..."
+# filename=configure_docker_dns.sh
+# if [ -f "$SCRIPTS_PATH$filename" ]; then
+#     echo "Running $filename..."
+#     bash "$SCRIPTS_PATH$filename"
+# else
+#     echo "$filename not found in $SCRIPTS_PATH"
+# fi
 
 
 
